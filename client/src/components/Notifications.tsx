@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Check, Trash2, MoreHorizontal } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 import { useAuth } from '../contexts/AuthContext';
 import NotificationItem from './NotificationItem';
 
@@ -41,7 +42,7 @@ const Notifications: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/notifications?page=${page}&limit=20`, {
+      const response = await fetch(`${API_ENDPOINTS.NOTIFICATIONS}?page=${page}&limit=20`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -76,7 +77,7 @@ const Notifications: React.FC = () => {
   const handleMarkAsRead = async (notificationId: string) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/notifications/${notificationId}/read`, {
+      const response = await fetch(API_ENDPOINTS.NOTIFICATION_READ(notificationId), {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -105,7 +106,7 @@ const Notifications: React.FC = () => {
   const handleMarkAllAsRead = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/notifications/mark-all-read', {
+      const response = await fetch(API_ENDPOINTS.MARK_ALL_READ, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,7 +129,7 @@ const Notifications: React.FC = () => {
   const handleDeleteNotification = async (notificationId: string) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/notifications/${notificationId}`, {
+      const response = await fetch(API_ENDPOINTS.NOTIFICATION_DELETE(notificationId), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

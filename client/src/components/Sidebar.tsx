@@ -12,6 +12,7 @@ import {
   Menu 
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_ENDPOINTS } from '../config/api';
 
 interface SidebarProps {
   activeSection: string;
@@ -28,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange, onCre
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/notifications?page=1&limit=1', {
+      const response = await fetch(`${API_ENDPOINTS.NOTIFICATIONS}?page=1&limit=1`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

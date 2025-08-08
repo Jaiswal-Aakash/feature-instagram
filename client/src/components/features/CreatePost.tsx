@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { X, Image, Video, Smile, MapPin, Users, Upload, Trash2 } from 'lucide-react';
 import ProfileAvatar from '../ProfileAvatar';
 import { useAuth } from '../../contexts/AuthContext';
+import { API_ENDPOINTS } from '../../config/api';
 
 interface CreatePostProps {
   isOpen: boolean;
@@ -84,7 +85,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
         formData.append('media', selectedFile);
         formData.append('caption', caption);
 
-        const uploadResponse = await fetch('http://localhost:5000/api/upload', {
+        const uploadResponse = await fetch(API_ENDPOINTS.UPLOAD, {
           method: 'POST',
           body: formData,
         });
@@ -108,7 +109,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
             tags: [] // Can be extracted from caption later
           };
 
-          const postResponse = await fetch('http://localhost:5000/api/posts', {
+          const postResponse = await fetch(API_ENDPOINTS.POSTS, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -136,7 +137,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
             if (refreshSuccess) {
               // Retry the post creation with new token
               const newToken = localStorage.getItem('authToken');
-              const retryResponse = await fetch('http://localhost:5000/api/posts', {
+              const retryResponse = await fetch(API_ENDPOINTS.POSTS, {
                 method: 'POST',
                 headers: {
                   'Authorization': `Bearer ${newToken}`,
@@ -161,7 +162,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
                 // Retry failed - cleanup the uploaded media
                 if (uploadedMedia && uploadedMedia.publicId) {
                   try {
-                    await fetch('http://localhost:5000/api/upload/delete', {
+                    await fetch(API_ENDPOINTS.UPLOAD_DELETE, {
                       method: 'DELETE',
                       headers: {
                         'Content-Type': 'application/json'
@@ -182,7 +183,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
               // Token refresh failed - cleanup the uploaded media
               if (uploadedMedia && uploadedMedia.publicId) {
                 try {
-                  await fetch('http://localhost:5000/api/upload/delete', {
+                  await fetch(API_ENDPOINTS.UPLOAD_DELETE, {
                     method: 'DELETE',
                     headers: {
                       'Content-Type': 'application/json'
@@ -201,7 +202,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
             // Post creation failed - cleanup the uploaded media
             if (uploadedMedia && uploadedMedia.publicId) {
               try {
-                await fetch('http://localhost:5000/api/upload/delete', {
+                await fetch(API_ENDPOINTS.UPLOAD_DELETE, {
                   method: 'DELETE',
                   headers: {
                     'Content-Type': 'application/json'
@@ -227,7 +228,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ isOpen, onClose }) => {
         // If any error occurs and we have uploaded media, cleanup
         if (uploadedMedia && uploadedMedia.publicId) {
           try {
-            await fetch('http://localhost:5000/api/upload/delete', {
+            await fetch(API_ENDPOINTS.UPLOAD_DELETE, {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json'

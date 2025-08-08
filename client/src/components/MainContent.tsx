@@ -6,6 +6,7 @@ import Notifications from './Notifications';
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Trash2, Smile } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import EmojiPicker from 'emoji-picker-react';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Post {
   _id: string;
@@ -53,7 +54,7 @@ const MainContent: React.FC<MainContentProps> = ({ activeSection }) => {
       if (activeSection === 'home') {
         setLoading(true);
         try {
-          const response = await fetch('http://localhost:5000/api/posts');
+          const response = await fetch(API_ENDPOINTS.POSTS);
           if (response.ok) {
             const data = await response.json();
             setPosts(data.posts || []);
@@ -80,7 +81,7 @@ const MainContent: React.FC<MainContentProps> = ({ activeSection }) => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+      const response = await fetch(API_ENDPOINTS.POST_BY_ID(postId), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -108,7 +109,7 @@ const MainContent: React.FC<MainContentProps> = ({ activeSection }) => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+      const response = await fetch(API_ENDPOINTS.POST_LIKE(postId), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -136,7 +137,7 @@ const MainContent: React.FC<MainContentProps> = ({ activeSection }) => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
+      const response = await fetch(API_ENDPOINTS.POST_COMMENTS(postId), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

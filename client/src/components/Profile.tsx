@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Camera, Edit3, Plus, X, Link, MapPin, Trash2, Heart, MessageCircle } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Post {
   _id: string;
@@ -78,7 +79,7 @@ const Profile: React.FC = () => {
       
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/api/posts/user/${user.username}`);
+        const response = await fetch(API_ENDPOINTS.USER_POSTS(user.username));
         if (response.ok) {
           const data = await response.json();
           setProfileData(prev => ({
@@ -108,7 +109,7 @@ const Profile: React.FC = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+      const response = await fetch(API_ENDPOINTS.POST_BY_ID(postId), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -139,7 +140,7 @@ const Profile: React.FC = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+      const response = await fetch(API_ENDPOINTS.POST_LIKE(postId), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -189,7 +190,7 @@ const Profile: React.FC = () => {
     formData.append('media', file);
 
     try {
-      const response = await fetch('http://localhost:5000/api/upload', {
+      const response = await fetch(API_ENDPOINTS.UPLOAD, {
         method: 'POST',
         body: formData,
       });
@@ -234,7 +235,7 @@ const Profile: React.FC = () => {
     formData.append('media', file);
 
     try {
-      const response = await fetch('http://localhost:5000/api/upload', {
+      const response = await fetch(API_ENDPOINTS.UPLOAD, {
         method: 'POST',
         body: formData,
       });
