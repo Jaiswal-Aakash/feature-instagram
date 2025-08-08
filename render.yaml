@@ -1,3 +1,5 @@
+# Instagram Clone Blueprint
+# This blueprint deploys both the client and server from the same repository
 services:
   # Server Service
   - type: web
