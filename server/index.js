@@ -29,7 +29,7 @@ app.use(helmet({
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.CLIENT_URL, 'https://your-client-name.onrender.com']
+    ? [process.env.CLIENT_URL, 'https://feature-instagram-client.onrender.com']
     : 'http://localhost:3000',
   credentials: true,
   optionsSuccessStatus: 200
