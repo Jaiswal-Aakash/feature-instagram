@@ -28,3 +28,6 @@ Thumbs.db
 # App-specific
 server/uploads/
 client/build/
+
+# Render specific
+.render-buildlogs/

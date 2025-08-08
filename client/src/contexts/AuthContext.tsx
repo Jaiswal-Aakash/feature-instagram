@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 
 interface User {
   _id: string;
@@ -61,7 +62,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         const token = localStorage.getItem('authToken');
         if (token) {
-          const response = await fetch('http://localhost:5000/api/auth/me', {
+          const response = await fetch(API_ENDPOINTS.ME, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -76,7 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
               try {
-                const refreshResponse = await fetch('http://localhost:5000/api/auth/refresh', {
+                const refreshResponse = await fetch(API_ENDPOINTS.REFRESH, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
@@ -118,7 +119,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -146,7 +147,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (formData: RegisterFormData) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -173,7 +174,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const token = localStorage.getItem('authToken');
       if (token) {
-        await fetch('http://localhost:5000/api/auth/logout', {
+        await fetch(API_ENDPOINTS.LOGOUT, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -194,7 +195,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('No authentication token');
 
-      const response = await fetch('http://localhost:5000/api/auth/profile', {
+      const response = await fetch(API_ENDPOINTS.PROFILE, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -223,7 +224,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return false;
       }
 
-      const response = await fetch('http://localhost:5000/api/auth/refresh', {
+              const response = await fetch(API_ENDPOINTS.REFRESH, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
