@@ -28,7 +28,9 @@ app.use(helmet({
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.CLIENT_URL, 'https://your-client-name.onrender.com']
+    : 'http://localhost:3000',
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -45,8 +47,10 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/build')));
+// Serve static files from the React app (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
 
 // Configure multer for file uploads (temporary storage)
 const storage = multer.memoryStorage();
@@ -182,10 +186,12 @@ app.get('/api/reels', (req, res) => {
   res.json(reels);
 });
 
-// Serve React app for any other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
+// Serve React app for any other routes (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((error, req, res, next) => {
